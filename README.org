@@ -1,0 +1,16 @@
+Simple program for blurring, sharpening, edge detecting and more by doing a convolution between a 3x3 [[https://en.wikipedia.org/wiki/Kernel_(image_processing)][kernel]] and an image.
+
+* Usage
+#+begin_example
+(transform-img IMAGE KERNEL)
+#+end_example
+
+IMAGE is of =image?= type
+KERNEL is a =list= of 9 integers
+
+** Predefined kernels
+   - identity
+   - sharpen
+   - gaus-blur
+   - box-blur
+   - edge
