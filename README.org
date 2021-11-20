@@ -2,12 +2,12 @@ Simple program for blurring, sharpening, edge detecting and more by doing a conv
 
 * Usage
 #+begin_example
-(transform-img IMAGE KERNEL)
+(transform IMAGE KERNEL)
 #+end_example
 
 IMAGE is of =image?= type
 
-KERNEL is a =list= of 9 integers
+KERNEL is a =list= of 9 integers or a predefined kernel
 
 ** Predefined kernels
    - identity
