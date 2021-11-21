@@ -1,17 +1,12 @@
 #lang racket
 
-(define (list-min l)
-  (define (iter m l)
-    (if (empty? l)
-        m
-        (iter (min m (first l)) (rest l))))
-  (iter +inf.0 l))
+(define (list-minmax lst)
+  (define (iter remains I X)
+    (if (empty? remains)
+        (values I X)
+        (iter (rest remains)
+              (min I (first remains))
+              (max X (first remains)))))
+  (iter lst +inf.0 -inf.0))
 
-(define (list-max l)
-  (define (iter m l)
-    (if (empty? l)
-        m
-        (iter (max m (first l)) (rest l))))
-  (iter -inf.0 l))
-
-(provide list-min list-max)
+(provide list-minmax)

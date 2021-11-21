@@ -31,12 +31,11 @@
            3x3 kernel))
 
   (define (normalize pixels)
-    (define min (list-min pixels))
-    (define max (list-max pixels))
+    (define-values (I X) (list-minmax pixels))
     (define Nmin 0)
     (define Nmax 255)
     (map (lambda (pixel)
-           (floor (* (- pixel min) (/ (- Nmax Nmin) (- max min)))))
+           (floor (* (- pixel I) (/ (- Nmax Nmin) (- X I)))))
          pixels))
 
   (define 3x3s

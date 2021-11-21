@@ -4,7 +4,7 @@
          "processing.rkt"
          "kernels.rkt")
 
-; (define target (bitmap/file "img.jpg"))
+;(define target (bitmap/file "img.jpg"))
 
 (define (color-list->grayscale colorlist)
   (for/list ((color colorlist))
