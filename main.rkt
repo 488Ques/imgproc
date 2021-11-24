@@ -4,28 +4,36 @@
          "processing.rkt"
          "kernels.rkt")
 
-;(define target (bitmap/file "img.jpg"))
-
-(define (color-list->grayscale colorlist)
-  (for/list ((color colorlist))
-    (define r (color-red color))
-    (define g (color-green color))
-    (define b (color-blue color))
-    (define gs (exact-floor (+ (* 0.2126 r) (* 0.7152 g) (* 0.0722 b))))
-    gs))
-
-(define (grayscale->color-list grayscale)
-  (for/list ([gs grayscale])
-    (make-color gs gs gs)))
+(define target (bitmap/file "img.jpg"))
 
 (define (transform image kernel)
-  (define WIDTH (image-width image))
-  (define HEIGHT (image-height image))
-
-  (define cl (image->color-list image))
-  (define gs (color-list->grayscale cl))
-  (define gs-matrix (list->matrix gs WIDTH))
-  (define processed (processing gs-matrix kernel))
-  (define processed-cl (grayscale->color-list processed))
+  (define COL (image-width image))
+  (define ROW (image-height image))
+  (define pixels (image->color-list image))
   
-  (color-list->bitmap processed-cl WIDTH HEIGHT))
+  (define (extract-channels clrlst)
+    (define (extract-channel channel)
+      (list->matrix (map (lambda (clr) (channel clr)) clrlst) COL))
+    (values (extract-channel color-red)
+            (extract-channel color-green)
+            (extract-channel color-blue)))
+  
+  (define (process-channels R G B kernel)
+    (define (process-channel channel)
+      (processing channel kernel))
+    (values (process-channel R)
+            (process-channel G)
+            (process-channel B)))
+
+  (define (join-channels R G B)
+    (for/list ([r R]
+               [g G]
+               [b B])
+      (make-color r g b)))
+  
+  (define-values (R G B) (extract-channels pixels))
+  (define-values (proc-R proc-G proc-B) (process-channels R G B kernel))
+  (define proc-clrlst (join-channels proc-R
+                                     proc-G
+                                     proc-B))
+  (color-list->bitmap proc-clrlst COL ROW))
